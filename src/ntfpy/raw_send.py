@@ -1,16 +1,16 @@
 import requests
 import base64
 
-__all__ = (
-    'send'
-)
+__all__ = [
+    "raw_send"
+]
 
-def send(server, topic, message, auth = None, title = None, priority = None, tags = None, click = None, attach = None, actions = None, email = None, delay = None):
+def raw_send(server, topic, message, auth = None, title = None, priority = None, tags = None, click = None, attach = None, actions = None, email = None, delay = None):
     headers = {}
     if auth != None:
-        auth_bytes = auth.encode('ascii')
+        auth_bytes = auth.encode("ascii")
         b64_bytes = base64.b64encode(auth_bytes)
-        b64_s = b64_bytes.decode('ascii')
+        b64_s = b64_bytes.decode("ascii")
         headers["Authorization"] = f"Basic {b64_s}"
     if title != None:
         headers["Title"] = title
