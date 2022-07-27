@@ -1,6 +1,6 @@
 # ntfpy
 
-Wrapper for ntfy.sh processes
+Python API Wrapper for ntfy.sh
 
 ### Installation
 
