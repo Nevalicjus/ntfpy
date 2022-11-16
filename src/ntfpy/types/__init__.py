@@ -4,3 +4,4 @@ from .client       import *
 from .message      import *
 from .push_message import *
 from .actions      import *
+from .attachements import *

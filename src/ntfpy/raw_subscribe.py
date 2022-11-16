@@ -4,7 +4,7 @@ import json
 import logging
 from typing import Optional, Callable
 
-from .types import NTFYMessage
+from .types.message import NTFYMessage
 
 __all__ = [
     "raw_subscribe"
