@@ -23,6 +23,16 @@ class NTFYClient():
         auth = self.user.auth() if self.user is not None else None
         raw_send(self.server.url, self.topic, message, auth = auth, title = title, priority = priority, tags = tags, click = click, attach = attach, actions = actions, email = email, delay = delay, icon = icon)
 
+    def send_message(self, message: NTFYPushMessage):
+        priority = str(message.priority) if message.priority is not None else None
+        actions = None
+        if message.actions is not None and len(message.actions) > 0:
+            actions = "; ".join(a.format_header() for a in message.actions)
+        tags = None
+        if message.tags is not None and len(message.tags) > 0:
+            tags = ",".join(message.tags)
+        self.send(message.message, title=message.title, priority=priority, tags=tags, click=message.click_url, attach=message.attach, actions=actions, email=message.email, delay=message.delay, icon=message.icon_url)
+
     async def subscribe(self, consumer: Callable[[NTFYMessage],None] = print):
         auth = self.user.auth() if self.user is not None else None
         await raw_subscribe(self.server.url, self.topic, auth = auth, consumer = consumer)
