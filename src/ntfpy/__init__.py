@@ -1,4 +1,4 @@
-from .classes import *
+from .types import *
 
 from .raw_send import *
 

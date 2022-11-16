@@ -3,7 +3,7 @@ import base64
 import json
 from typing import Optional
 
-from .classes import NTFYMessage
+from .types import NTFYMessage
 
 __all__ = [
     "raw_subscribe"
