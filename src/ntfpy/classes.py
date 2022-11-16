@@ -18,33 +18,33 @@ class NTFYClient():
 
     def send(self, message, title = None, priority = None, tags = None, click = None, attach = None, actions = None, email = None, delay = None):
         headers = {}
-        if self.user != None:
+        if self.user is not None:
             auth = f"{self.user.username}:{self.user.password}"
             auth_bytes = auth.encode("ascii")
             b64_bytes = base64.b64encode(auth_bytes)
             b64_s = b64_bytes.decode("ascii")
             headers["Authorization"] = f"Basic {b64_s}"
-        if title != None:
+        if title is not None:
             headers["Title"] = title
-        if priority != None:
+        if priority is not None:
             headers["Priority"] = priority
-        if tags != None:
+        if tags is not None:
             headers["Tags"] = tags
-        if click != None:
+        if click is not None:
             headers["Click"] = click
-        if attach != None:
+        if attach is not None:
             headers["Attach"] = attach
-        if actions != None:
+        if actions is not None:
             headers["Actions"] = actions
-        if email != None:
+        if email is not None:
             headers["Email"] = email
-        if delay != None:
+        if delay is not None:
             headers["Delay"] = delay
         r = requests.post(f"{self.server.url}/{self.topic}", headers = headers, data = message)
 
     async def subscribe(self):
         headers = {}
-        if self.user != None:
+        if self.user is not None:
             auth = f"{self.user.username}:{self.user.password}"
             auth_bytes = auth.encode("ascii")
             b64_bytes = base64.b64encode(auth_bytes)
