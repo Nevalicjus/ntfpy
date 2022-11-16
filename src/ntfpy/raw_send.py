@@ -1,12 +1,16 @@
 import requests
 import base64
+from typing import Optional, Mapping
 
 __all__ = [
     "raw_send"
 ]
 
-def raw_send(server, topic, message, auth = None, title = None, priority = None, tags = None, click = None, attach = None, actions = None, email = None, delay = None):
-    headers = {}
+def raw_send(server: str, topic: str, message: str, auth: Optional[str] = None, title: Optional[str] = None, 
+             priority: Optional[str] = None, tags: Optional[str] = None, click: Optional[str] = None, 
+             attach: Optional[str] = None, actions: Optional[str] = None, email: Optional[str] = None, 
+             delay: Optional[str] = None):
+    headers: Mapping[str,str] = {}
     if auth is not None:
         auth_bytes = auth.encode("ascii")
         b64_bytes = base64.b64encode(auth_bytes)

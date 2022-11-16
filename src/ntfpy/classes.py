@@ -1,7 +1,8 @@
-import requests
-import base64
 import time
-import json
+from typing import Optional, Sequence
+
+from .raw_send import raw_send
+from .raw_subscribe import raw_subscribe
 
 __all__ = [
     "NTFYClient",
@@ -10,61 +11,38 @@ __all__ = [
     "NTFYUser"
 ]
 
+class NTFYServer():
+    def __init__(self, url):
+        self.url = url
+
+class NTFYUser():
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password
+    
+    def auth(self) -> str :
+        return f"{self.username}:{self.password}"
+
 class NTFYClient():
-    def __init__(self, server, topic, user = None):
+    def __init__(self, server: NTFYServer, topic: str, user: Optional[NTFYUser] = None):
         self.server = server
         self.topic = topic
         self.user = user
 
-    def send(self, message, title = None, priority = None, tags = None, click = None, attach = None, actions = None, email = None, delay = None):
-        headers = {}
-        if self.user is not None:
-            auth = f"{self.user.username}:{self.user.password}"
-            auth_bytes = auth.encode("ascii")
-            b64_bytes = base64.b64encode(auth_bytes)
-            b64_s = b64_bytes.decode("ascii")
-            headers["Authorization"] = f"Basic {b64_s}"
-        if title is not None:
-            headers["Title"] = title
-        if priority is not None:
-            headers["Priority"] = priority
-        if tags is not None:
-            headers["Tags"] = tags
-        if click is not None:
-            headers["Click"] = click
-        if attach is not None:
-            headers["Attach"] = attach
-        if actions is not None:
-            headers["Actions"] = actions
-        if email is not None:
-            headers["Email"] = email
-        if delay is not None:
-            headers["Delay"] = delay
-        r = requests.post(f"{self.server.url}/{self.topic}", headers = headers, data = message)
+    def send(self, message: str, title: Optional[str] = None, priority: Optional[str] = None, tags: Optional[str] = None, 
+                   click: Optional[str] = None, attach: Optional[str] = None, actions: Optional[str] = None, 
+                   email: Optional[str] = None, delay: Optional[str] = None):
+        auth = self.user.auth() if self.user is not None else None
+        raw_send(self.server.url, self.topic, message, auth = auth, title = title, priority = priority, tags = tags, click = click, attach = attach, actions = actions, email = email, delay = delay)
 
     async def subscribe(self):
-        headers = {}
-        if self.user is not None:
-            auth = f"{self.user.username}:{self.user.password}"
-            auth_bytes = auth.encode("ascii")
-            b64_bytes = base64.b64encode(auth_bytes)
-            b64_s = b64_bytes.decode("ascii")
-            headers["Authorization"] = f"Basic {b64_s}"
-        r = requests.get(f"{self.server.url}/{self.topic}/json", stream = True, headers = headers)
-        for l in r.iter_lines():
-            if l:
-                d = json.loads(l.decode("utf-8"))
-                if d["event"] == "message":
-                    m = NTFYMessage(d["message"], d["id"], d["time"], d["topic"])
-                    for x in ["title", "priority", "tags", "click", "attach", "actions", "email", "delay"]:
-                        if x in d:
-                            setattr(m, x, d[x])
-                    print(m)
-                else:
-                    print(d)
+        auth = self.user.auth() if self.user is not None else None
+        await raw_subscribe(self.server.url, self.topic, auth = auth)
 
 class NTFYMessage():
-    def __init__(self, message, id, timestamp, topic, title = None, priority = None, tags = None, click = None, attach = None, actions = None, email = None, delay = None):
+    def __init__(self, message: str, id: str, timestamp: int, topic: str, title: Optional[str] = None, 
+                       priority: Optional[int] = None, tags: Optional[Sequence[str]] = None, click: Optional[str] = None, 
+                       attach = None, actions = None, email: Optional[str] = None, delay = None):
         self.message = message
         self.id = id
         self.timestamp = timestamp
@@ -80,12 +58,3 @@ class NTFYMessage():
     
     def __str__(self):
         return f"{self.id} @ {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(self.timestamp))}\n{self.topic}: {self.message}"
-
-class NTFYServer():
-    def __init__(self, url):
-        self.url = url
-
-class NTFYUser():
-    def __init__(self, username, password):
-        self.username = username
-        self.password = password
