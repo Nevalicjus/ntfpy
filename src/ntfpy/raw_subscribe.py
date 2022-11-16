@@ -12,7 +12,7 @@ __all__ = [
 
 logger = logging.getLogger(__name__)
 
-OPTIONAL_FIELDS = ["title", "priority", "tags", "click", "attach", "actions", "email", "delay"]
+OPTIONAL_FIELDS = ["title", "priority", "tags", "click", "attach", "actions", "email", "delay", "icon"]
 
 async def raw_subscribe(server: str, topic: str, auth: Optional[str] = None, consumer: Callable[[NTFYMessage],None] = print):
     headers = {}

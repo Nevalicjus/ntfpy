@@ -9,7 +9,7 @@ __all__ = [
 def raw_send(server: str, topic: str, message: str, auth: Optional[str] = None, title: Optional[str] = None, 
              priority: Optional[str] = None, tags: Optional[str] = None, click: Optional[str] = None, 
              attach: Optional[str] = None, actions: Optional[str] = None, email: Optional[str] = None, 
-             delay: Optional[str] = None):
+             delay: Optional[str] = None, icon: Optional[str] = None):
     headers: Mapping[str,str] = {}
     if auth is not None:
         auth_bytes = auth.encode("ascii")
@@ -30,6 +30,8 @@ def raw_send(server: str, topic: str, message: str, auth: Optional[str] = None, 
         headers["Actions"] = actions
     if email is not None:
         headers["Email"] = email
+    if icon is not None:
+        headers["Icon"] = icon
     if delay is not None:
         headers["Delay"] = delay
     r = requests.post(f"{server}/{topic}", headers = headers, data = message)
