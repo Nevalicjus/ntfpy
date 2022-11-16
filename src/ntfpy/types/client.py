@@ -1,7 +1,8 @@
-from typing import Optional
+from typing import Optional, Callable
 
 from .server import NTFYServer
 from .user import NTFYUser
+from .message import NTFYMessage
 from ..raw_send import raw_send
 from ..raw_subscribe import raw_subscribe
 
@@ -21,6 +22,6 @@ class NTFYClient():
         auth = self.user.auth() if self.user is not None else None
         raw_send(self.server.url, self.topic, message, auth = auth, title = title, priority = priority, tags = tags, click = click, attach = attach, actions = actions, email = email, delay = delay)
 
-    async def subscribe(self):
+    async def subscribe(self, consumer: Callable[[NTFYMessage],None] = print):
         auth = self.user.auth() if self.user is not None else None
-        await raw_subscribe(self.server.url, self.topic, auth = auth)
+        await raw_subscribe(self.server.url, self.topic, auth = auth, consumer = consumer)

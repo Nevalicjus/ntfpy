@@ -1,7 +1,8 @@
 import requests
 import base64
 import json
-from typing import Optional
+import logging
+from typing import Optional, Callable
 
 from .types import NTFYMessage
 
@@ -9,9 +10,11 @@ __all__ = [
     "raw_subscribe"
 ]
 
+logger = logging.getLogger(__name__)
+
 OPTIONAL_FIELDS = ["title", "priority", "tags", "click", "attach", "actions", "email", "delay"]
 
-async def raw_subscribe(server: str, topic: str, auth: Optional[str] = None):
+async def raw_subscribe(server: str, topic: str, auth: Optional[str] = None, consumer: Callable[[NTFYMessage],None] = print):
     headers = {}
     if auth is not None:
         auth_bytes = auth.encode("ascii")
@@ -27,6 +30,6 @@ async def raw_subscribe(server: str, topic: str, auth: Optional[str] = None):
                 for x in OPTIONAL_FIELDS:
                     if x in d:
                         setattr(m, x, d[x])
-                print(m)
+                consumer(m)
             else:
-                print(d)
+                logger.debug(d)
