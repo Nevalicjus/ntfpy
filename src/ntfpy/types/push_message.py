@@ -1,6 +1,7 @@
 from typing import Optional, MutableSequence
 
 from .actions import NTFYAction
+from .attachements import NTFYUrlAttachement
 
 __all__ = [
 	"NTFYPushMessage"
@@ -8,7 +9,7 @@ __all__ = [
 
 class NTFYPushMessage():
     def __init__(self, message: str, title: Optional[str] = None, priority: Optional[int] = None, 
-                       tags: Optional[MutableSequence[str]] = None, click_url: Optional[str] = None, attach: Optional[str] = None, 
+                       tags: Optional[MutableSequence[str]] = None, click_url: Optional[str] = None, attach: Optional[NTFYUrlAttachement] = None, 
                        actions: Optional[MutableSequence[NTFYAction]] = None, email: Optional[str] = None, delay: Optional[str] = None,
                        icon_url: Optional[str] = None):
         self.message = message

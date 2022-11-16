@@ -31,7 +31,10 @@ class NTFYClient():
         tags = None
         if message.tags is not None and len(message.tags) > 0:
             tags = ",".join(message.tags)
-        self.send(message.message, title=message.title, priority=priority, tags=tags, click=message.click_url, attach=message.attach, actions=actions, email=message.email, delay=message.delay, icon=message.icon_url)
+        attachement = None
+        if message.attachement is not None :
+            attachement = message.attachement.url
+        self.send(message.message, title=message.title, priority=priority, tags=tags, click=message.click_url, attach=attachement, actions=actions, email=message.email, delay=message.delay, icon=message.icon_url)
 
     async def subscribe(self, consumer: Callable[[NTFYMessage],None] = print):
         auth = self.user.auth() if self.user is not None else None
