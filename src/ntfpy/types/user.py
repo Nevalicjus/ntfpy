@@ -1,4 +1,3 @@
-
 __all__ = [
     "NTFYUser"
 ]
@@ -8,5 +7,5 @@ class NTFYUser():
         self.username = username
         self.password = password
     
-    def auth(self) -> str :
+    def auth(self) -> str:
         return f"{self.username}:{self.password}"

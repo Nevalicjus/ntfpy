@@ -1,5 +1,6 @@
 import requests
 import base64
+import json
 from typing import Optional, Mapping
 
 __all__ = [
@@ -10,28 +11,29 @@ def raw_send(server: str, topic: str, message: str, auth: Optional[str] = None, 
              priority: Optional[str] = None, tags: Optional[str] = None, click: Optional[str] = None, 
              attach: Optional[str] = None, actions: Optional[str] = None, email: Optional[str] = None, 
              delay: Optional[str] = None, icon: Optional[str] = None):
-    headers: Mapping[str,str] = {}
+    headers: Mapping[str, str] = {}
+    data: Mapping[str, str] = {}
     if auth is not None:
-        auth_bytes = auth.encode("ascii")
-        b64_bytes = base64.b64encode(auth_bytes)
-        b64_s = b64_bytes.decode("ascii")
-        headers["Authorization"] = f"Basic {b64_s}"
+        headers["Authorization"] = f"Basic {base64.b64encode(auth.encode('ascii')).decode('ascii')}"
+    data["topic"] = topic
+    data["message"] = message
     if title is not None:
-        headers["Title"] = title
-    if priority is not None:
-        headers["Priority"] = priority
+        data["title"] = title
     if tags is not None:
-        headers["Tags"] = tags
+        data["tags"] = tags
+    if priority is not None:
+        data["priority"] = priority
     if click is not None:
-        headers["Click"] = click
+        data["click"] = click
     if attach is not None:
-        headers["Attach"] = attach
+        data["attach"] = attach
     if actions is not None:
-        headers["Actions"] = actions
+        data["actions"] = actions
     if email is not None:
-        headers["Email"] = email
+        data["email"] = email
     if icon is not None:
-        headers["Icon"] = icon
+        data["icon"] = icon
     if delay is not None:
-        headers["Delay"] = delay
-    r = requests.post(f"{server}/{topic}", headers = headers, data = message)
+        data["delay"] = delay
+    print(data)
+    requests.post(f"{server}/", headers = headers, data = json.dumps(data))

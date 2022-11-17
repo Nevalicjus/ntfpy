@@ -6,14 +6,14 @@ __all__ = [
 ]
 
 class NTFYAction(ABC) :
-	def __init__(self, action: str, label: str):
-		self.action = action
-		self.label = label
-		self.clear: Optional[bool] = None
+    def __init__(self, action: str, label: str):
+        self.action = action
+        self.label = label
+        self.clear: Optional[bool] = None
 	
-	def clearOnClick(self, clear=True) :
-		self.clear = clear
+    def clearOnClick(self, clear = True):
+        self.clear = clear
 	
-	@abstractmethod
-	def format_header(self) -> str:
-		pass
+    @abstractmethod
+    def format_header(self) -> str:
+        pass

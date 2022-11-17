@@ -5,7 +5,7 @@ __all__ = [
 ]
 
 class NTFYUrlAttachment:
-	def __init__(self, url: str, filename: Optional[str] = None) :
+	def __init__(self, url: str, filename: Optional[str] = None):
 		self.url = url
 		self.filename = filename
 	

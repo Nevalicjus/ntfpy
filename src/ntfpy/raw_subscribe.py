@@ -14,13 +14,10 @@ logger = logging.getLogger(__name__)
 
 OPTIONAL_FIELDS = ["title", "priority", "tags", "click", "attach", "actions", "email", "delay", "icon"]
 
-async def raw_subscribe(server: str, topic: str, auth: Optional[str] = None, consumer: Callable[[NTFYMessage],None] = print):
+async def raw_subscribe(server: str, topic: str, auth: Optional[str] = None, func: Callable[[NTFYMessage], None] = print):
     headers = {}
     if auth is not None:
-        auth_bytes = auth.encode("ascii")
-        b64_bytes = base64.b64encode(auth_bytes)
-        b64_s = b64_bytes.decode("ascii")
-        headers["Authorization"] = f"Basic {b64_s}"
+        headers["Authorization"] = f"Basic {base64.b64encode(auth.encode('ascii')).decode('ascii')}"
     r = requests.get(f"{server}/{topic}/json", stream = True, headers = headers)
     for l in r.iter_lines():
         if l:
@@ -30,6 +27,6 @@ async def raw_subscribe(server: str, topic: str, auth: Optional[str] = None, con
                 for x in OPTIONAL_FIELDS:
                     if x in d:
                         setattr(m, x, d[x])
-                consumer(m)
+                func(m)
             else:
                 logger.debug(d)

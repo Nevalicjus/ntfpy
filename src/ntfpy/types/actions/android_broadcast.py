@@ -7,9 +7,9 @@ __all__ = [
 
 class NTFYBroadcastAction(NTFYAction):
 	def __init__(self, label: str):
-		super().__init__('broadcast', label)
+		super().__init__("broadcast", label)
 		self.intent: Optional[str] = None
-		self.extras: Optional[MutableMapping[str,str]] = None
+		self.extras: Optional[MutableMapping[str, str]] = None
 	
 	def addExtra(self, name: str, value: str):
 		if self.extras is None:

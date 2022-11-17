@@ -6,7 +6,7 @@ __all__ = [
 
 class NTFYViewAction(NTFYAction) :
 	def __init__(self, label: str, url: str):
-		super().__init__('view', label)
+		super().__init__("view", label)
 		self.url = url
 	
 	def format_header(self) -> str:
