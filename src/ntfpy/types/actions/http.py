@@ -1,9 +1,11 @@
 from .action import NTFYAction
-from typing import Optional, MutableMapping, Mapping, Any
+from typing import Optional, Literal, MutableMapping, Mapping, Any
 
 __all__ = [
 	"NTFYHttpAction"
 ]
+
+METHOD = Literal["GET", "POST", "PUT", "PATCH", "DELETE"]
 
 class NTFYHttpAction(NTFYAction):
     def __init__(self, label: str, url: str):
@@ -12,6 +14,9 @@ class NTFYHttpAction(NTFYAction):
         self.method: Optional[str] = None
         self.headers: Optional[MutableMapping[str, str]] = None
         self.body: Optional[str] = None
+    
+    def setMethod(self, method: METHOD) :
+        self.method = method
 	
     def addHeader(self, header: str, value: str):
         if self.headers is None:
