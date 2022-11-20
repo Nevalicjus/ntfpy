@@ -3,7 +3,9 @@ import base64
 import json
 from typing import Optional, Mapping, Sequence
 
-from .types import NTFYPushMessage, NTFYAction, NTFYUrlAttachment, PRIORITY
+from .types.push_message import NTFYPushMessage, PRIORITY
+from .types.actions      import NTFYAction
+from .types.attachments  import NTFYUrlAttachment
 
 __all__ = [
     "raw_send",
