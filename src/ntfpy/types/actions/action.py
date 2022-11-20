@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Optional
+from typing import Optional, Final, Mapping, Any
 
 __all__ = [
 	"NTFYAction"
@@ -7,8 +7,8 @@ __all__ = [
 
 class NTFYAction(ABC) :
     def __init__(self, action: str, label: str):
-        self.action = action
-        self.label = label
+        self.action: Final[str] = action
+        self.label: str = label
         self.clear: Optional[bool] = None
 	
     def clearOnClick(self, clear = True):

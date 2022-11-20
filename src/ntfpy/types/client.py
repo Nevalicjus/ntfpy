@@ -1,10 +1,13 @@
-from typing import Optional, Callable
+from requests import Response
+from typing import Optional, Callable, Final, Sequence
 
 from .server import NTFYServer
 from .user import NTFYUser
 from .message import NTFYMessage
-from .push_message import NTFYPushMessage
-from ..raw_send import raw_send
+from .push_message import NTFYPushMessage, PRIORITY
+from .actions import NTFYAction
+from .attachments import NTFYUrlAttachment
+from ..raw_send import raw_send, raw_send_message
 from ..raw_subscribe import raw_subscribe
 
 __all__ = [
@@ -13,9 +16,9 @@ __all__ = [
 
 class NTFYClient():
     def __init__(self, server: NTFYServer, topic: str, user: Optional[NTFYUser] = None):
-        self.server = server
-        self.topic = topic
-        self.user = user
+        self.server: Final[NTFYServer]  = server
+        self.topic:  Final[str]         = topic
+        self.user:   Optional[NTFYUser] = user
 
     def send(self, message: str, title: Optional[str] = None, priority: Optional[str] = None, tags: Optional[str] = None, 
             click: Optional[str] = None, attach: Optional[str] = None, actions: Optional[str] = None, 

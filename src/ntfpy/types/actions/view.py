@@ -1,4 +1,5 @@
 from .action import NTFYAction
+from typing import Mapping, Any
 
 __all__ = [
 	"NTFYViewAction"
@@ -7,7 +8,7 @@ __all__ = [
 class NTFYViewAction(NTFYAction) :
 	def __init__(self, label: str, url: str):
 		super().__init__("view", label)
-		self.url = url
+		self.url: str = url
 	
 	def format_header(self) -> str:
 		res = [self.action, self.label, self.url]

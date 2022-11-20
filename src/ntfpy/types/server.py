@@ -1,7 +1,9 @@
+from typing import Final
+
 __all__ = [
     "NTFYServer"
 ]
 
 class NTFYServer():
-    def __init__(self, url):
-        self.url = url
+    def __init__(self, url: str):
+        self.url: Final[str] = url
