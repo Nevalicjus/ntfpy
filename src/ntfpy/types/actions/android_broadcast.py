@@ -1,5 +1,6 @@
+from typing import Any, Mapping, MutableMapping, Optional
+
 from .action import NTFYAction
-from typing import Optional, MutableMapping, Mapping, Any
 
 __all__ = [
 	"NTFYBroadcastAction"
@@ -13,13 +14,13 @@ class NTFYBroadcastAction(NTFYAction):
 	
 	def addExtra(self, name: str, value: str):
 		if self.extras is None:
-			self.extras = {}
-		self.extras[name] = value
+			self.extras = {} 
+			self.extras[name] = value 
 	
-	def format_json(self) -> Mapping[str,Any]:
-		res: dict[str,Any] = {
-			"action": self.action, 
-			"label":  self.label
+	def format_json(self) -> Mapping[str, Any]:
+		res: dict[str, Any] = {
+			"action": self.action,
+			"label": self.label
 		}
 		for prop in ["intent", "extras", "clear"]:
 			if self.__dict__[prop] is not None:

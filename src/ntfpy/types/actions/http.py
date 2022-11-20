@@ -1,5 +1,6 @@
+from typing import Any, Literal, Mapping, MutableMapping, Optional
+
 from .action import NTFYAction
-from typing import Optional, Literal, MutableMapping, Mapping, Any
 
 __all__ = [
 	"NTFYHttpAction"
@@ -23,11 +24,11 @@ class NTFYHttpAction(NTFYAction):
             self.headers = {}
         self.headers[header] = value
     
-    def format_header(self) -> Mapping[str,Any]:
-        res: dict[str,Any] = {
+    def format_header(self) -> Mapping[str, Any]:
+        res: dict[str, Any] = {
             "action": self.action, 
-            "label":  self.label,
-            "url":    self.url
+            "label": self.label,
+            "url": self.url
         }
         for prop in ["method", "headers", "body", "clear"]:
             if self.__dict__[prop] is not None:

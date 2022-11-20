@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Optional, Final, Mapping, Any
-
+from typing import Any, Final, Mapping, Optional
 __all__ = [
 	"NTFYAction"
 ]
@@ -15,5 +14,5 @@ class NTFYAction(ABC) :
         self.clear = clear
 	
     @abstractmethod
-    def format_json(self) -> Mapping[str,Any]:
+    def format_json(self) -> Mapping[str, Any]:
         pass

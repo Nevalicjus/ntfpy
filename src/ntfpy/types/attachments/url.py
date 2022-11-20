@@ -1,4 +1,4 @@
-from typing import Optional, Mapping, Any
+from typing import Any, Mapping, Optional
 
 __all__ = [
 	"NTFYUrlAttachment"
@@ -15,5 +15,4 @@ class NTFYUrlAttachment:
 		}
 		if self.filename is not None :
 			res["filename"] = self.filename
-		return res
-	
+		return res	

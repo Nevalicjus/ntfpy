@@ -1,5 +1,5 @@
 import time
-from typing import Optional, Sequence, Any
+from typing import Any, Optional, Sequence
 
 __all__ = [
 	"NTFYMessage"

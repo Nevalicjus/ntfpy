@@ -1,4 +1,4 @@
-from typing import Optional, Literal, Sequence, MutableSequence, Mapping, Any
+from typing import Any, Literal, Mapping, MutableSequence, Optional, Sequence
 
 from .actions import NTFYAction
 from .attachments import NTFYUrlAttachment
@@ -31,13 +31,21 @@ class NTFYPushMessage():
             self.tags = []
         self.tags.append(tag)
     
+    def removeTag(self, tag: str):
+        if self.tags is not None:
+            self.tags.remove(tag)
+    
     def addAction(self, action: NTFYAction):
         if self.actions is None:
             self.actions = []
         self.actions.append(action)
     
-    def json(self, topic: str) -> Mapping[str,Any]:
-        res: dict[str,Any] = {
+    def removeAction(self, action: NTFYAction):
+        if self.actions is not None:
+            self.actions.remove(action)
+    
+    def json(self, topic: str) -> Mapping[str, Any]:
+        res: dict[str, Any] = {
             "topic":   topic,
             "message": self.message
         }

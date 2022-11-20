@@ -1,11 +1,10 @@
 import requests
 import base64
-import json
-from typing import Optional, Mapping, Sequence
+from typing import Mapping, Optional, Sequence
 
+from .types.actions import NTFYAction
+from .types.attachments import NTFYUrlAttachment
 from .types.push_message import NTFYPushMessage, PRIORITY
-from .types.actions      import NTFYAction
-from .types.attachments  import NTFYUrlAttachment
 
 __all__ = [
     "raw_send",
@@ -17,13 +16,13 @@ def raw_send(server: str, topic: str, message: str, auth: Optional[str] = None, 
              attach: Optional[NTFYUrlAttachment] = None, actions: Optional[Sequence[NTFYAction]] = None, 
              email: Optional[str] = None, delay: Optional[str] = None, icon: Optional[str] = None) -> requests.Response:
     msg = NTFYPushMessage(message, tags = tags, actions = actions)
-    msg.title      = title
-    msg.priority   = priority
-    msg.click_url  = click
+    msg.title = title
+    msg.priority = priority
+    msg.click_url = click
     msg.attachment = attach
-    msg.email      = email
-    msg.delay      = delay
-    msg.icon_url   = icon
+    msg.email = email
+    msg.delay = delay
+    msg.icon_url = icon
     return raw_send_message(server, topic, msg, auth = auth)
 
 def raw_send_message(server: str, topic: str, message: NTFYPushMessage, auth: Optional[str] = None) -> requests.Response:

@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 OPTIONAL_FIELDS = ["title", "priority", "tags", "click", "attach", "actions", "email", "delay", "icon"]
 
-async def raw_subscribe(server: str, topic: str, auth: Optional[str] = None, func: Callable[[NTFYMessage], None] = print):
+async def raw_subscribe(server: str, topic: str, auth: Optional[str] = None, handler: Callable[[NTFYMessage], None] = print):
     headers = {}
     if auth is not None:
         headers["Authorization"] = f"Basic {base64.b64encode(auth.encode('ascii')).decode('ascii')}"
@@ -27,6 +27,6 @@ async def raw_subscribe(server: str, topic: str, auth: Optional[str] = None, fun
                 for x in OPTIONAL_FIELDS:
                     if x in d:
                         setattr(m, x, d[x])
-                func(m)
+                handler(m)
             else:
                 logger.debug(d)
