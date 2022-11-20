@@ -36,3 +36,28 @@ class NTFYPushMessage():
             self.actions = []
         self.actions.append(action)
     
+    def json(self, topic: str) -> Mapping[str,Any]:
+        res: dict[str,Any] = {
+            "topic":   topic,
+            "message": self.message
+        }
+        if self.title is not None:
+            res["title"] = self.title
+        if self.tags is not None:
+            res["tags"] = self.tags
+        if self.priority is not None:
+            res["priority"] = self.priority
+        if self.click_url is not None:
+            res["click"] = self.click_url
+        if self.attachment is not None:
+            res.update(self.attachment.format_json())
+        if self.actions is not None:
+            res["actions"] = [action.format_json() for action in self.actions]
+        if self.email is not None:
+            res["email"] = self.email
+        if self.icon_url is not None:
+            res["icon"] = self.icon_url
+        if self.delay is not None:
+            res["delay"] = self.delay
+        return res
+    

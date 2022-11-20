@@ -1,5 +1,5 @@
 from .action import NTFYAction
-from typing import Optional, MutableMapping
+from typing import Optional, MutableMapping, Mapping, Any
 
 __all__ = [
 	"NTFYBroadcastAction"
@@ -16,12 +16,12 @@ class NTFYBroadcastAction(NTFYAction):
 			self.extras = {}
 		self.extras[name] = value
 	
-	def format_header(self) -> str:
-		res = [self.action, self.label]
-		if self.intent is not None:
-			res.append(f"intent={self.intent}")
-		if self.extras is not None and len(self.extras) > 0:
-			res.extend(f"extras.{name}={value}" for name, value in self.extras.items())
-		if self.clear is not None:
-			res.append(f"clear={'true' if self.clear else 'false'}")
-		return ", ".join(res)
+	def format_json(self) -> Mapping[str,Any]:
+		res: dict[str,Any] = {
+			"action": self.action, 
+			"label":  self.label
+		}
+		for prop in ["intent", "extras", "clear"]:
+			if self.__dict__[prop] is not None:
+				res[prop] = self.__dict__[prop]
+		return res

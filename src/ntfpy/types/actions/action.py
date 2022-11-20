@@ -15,5 +15,5 @@ class NTFYAction(ABC) :
         self.clear = clear
 	
     @abstractmethod
-    def format_header(self) -> str:
+    def format_json(self) -> Mapping[str,Any]:
         pass
