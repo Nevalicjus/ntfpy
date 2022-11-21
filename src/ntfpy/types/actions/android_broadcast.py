@@ -15,7 +15,7 @@ class NTFYBroadcastAction(NTFYAction):
 	def addExtra(self, name: str, value: str):
 		if self.extras is None:
 			self.extras = {} 
-			self.extras[name] = value 
+		self.extras[name] = value 
 	
 	def format_json(self) -> Mapping[str, Any]:
 		res: dict[str, Any] = {
