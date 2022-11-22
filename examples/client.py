@@ -1,8 +1,10 @@
-import ntfpy, asyncio
+import ntfpy
+import asyncio
 
 async def main():
     client = ntfpy.NTFYClient(ntfpy.NTFYServer("https://ntfy.sh"), "test", ntfpy.NTFYUser("user", "pass"))
     client.send("Hello World!")
     await client.subscribe()
 
-asyncio.run(main())
+if __name__ == "__main__":
+    asyncio.run(main())

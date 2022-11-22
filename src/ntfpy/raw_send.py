@@ -1,31 +1,33 @@
 import requests
 import base64
+from typing import Mapping, Optional, Sequence
+
+from .types.actions import NTFYAction
+from .types.attachments import NTFYUrlAttachment
+from .types.push_message import NTFYPushMessage, PRIORITY
 
 __all__ = [
-    "raw_send"
+    "raw_send",
+    "raw_send_message"
 ]
 
-def raw_send(server, topic, message, auth = None, title = None, priority = None, tags = None, click = None, attach = None, actions = None, email = None, delay = None):
-    headers = {}
-    if auth != None:
-        auth_bytes = auth.encode("ascii")
-        b64_bytes = base64.b64encode(auth_bytes)
-        b64_s = b64_bytes.decode("ascii")
-        headers["Authorization"] = f"Basic {b64_s}"
-    if title != None:
-        headers["Title"] = title
-    if priority != None:
-        headers["Priority"] = priority
-    if tags != None:
-        headers["Tags"] = tags
-    if click != None:
-        headers["Click"] = click
-    if attach != None:
-        headers["Attach"] = attach
-    if actions != None:
-        headers["Actions"] = actions
-    if email != None:
-        headers["Email"] = email
-    if delay != None:
-        headers["Delay"] = delay
-    r = requests.post(f"{server}/{topic}", headers = headers, data = message)
+def raw_send(server: str, topic: str, message: str, auth: Optional[str] = None, title: Optional[str] = None, 
+             priority: Optional[PRIORITY] = None, tags: Optional[Sequence[str]] = None, click: Optional[str] = None, 
+             attach: Optional[NTFYUrlAttachment] = None, actions: Optional[Sequence[NTFYAction]] = None, 
+             email: Optional[str] = None, delay: Optional[str] = None, icon: Optional[str] = None) -> requests.Response:
+    msg = NTFYPushMessage(message, tags = tags, actions = actions)
+    msg.title = title
+    msg.priority = priority
+    msg.click_url = click
+    msg.attachment = attach
+    msg.email = email
+    msg.delay = delay
+    msg.icon_url = icon
+    return raw_send_message(server, topic, msg, auth = auth)
+
+def raw_send_message(server: str, topic: str, message: NTFYPushMessage, auth: Optional[str] = None) -> requests.Response:
+    headers: Mapping[str, str] = {}
+    if auth is not None:
+        headers["Authorization"] = f"Basic {base64.b64encode(auth.encode('ascii')).decode('ascii')}"
+    data = message.json(topic)
+    return requests.post(f"{server}/", headers = headers, json = data)
