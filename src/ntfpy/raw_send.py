@@ -15,6 +15,38 @@ def raw_send(server: str, topic: str, message: str, auth: Optional[str] = None, 
              priority: Optional[PRIORITY] = None, tags: Optional[Sequence[str]] = None, click: Optional[str] = None, 
              attach: Optional[NTFYUrlAttachment] = None, actions: Optional[Sequence[NTFYAction]] = None, 
              email: Optional[str] = None, delay: Optional[str] = None, icon: Optional[str] = None) -> requests.Response:
+    """
+    Internal method for sending messages
+    
+    Parameters
+    ----------
+    server: :class:`str`
+        server's url address
+    topic: :class:`str`
+        topic where to send the message to
+    message: :class:`str`
+        message's content
+    auth: Optional[:class:`str`]
+        ``user:pass``
+    title: Optional[:class:`str`]
+        message's title
+    priority: Optional[:class:`PRIORITY`]
+        message's priority
+    tags: Optional[Sequence[:class:`str`]]
+        message's tags
+    click: Optional[:class:`str`]
+        message's click url
+    attach: Optional[:class:`NTFYUrlAttachment`]
+        message's url attachment
+    actions: Optional[Sequence[:class:`NTFYAction`]]
+        message's actions
+    email: Optional[:class:`str`]
+        message's email
+    delay: Optional[:class:`str`]
+        message's delay
+    icon: Optional[:class:`str`]
+        message's icon url
+    """
     msg = NTFYPushMessage(message, tags = tags, actions = actions)
     msg.title = title
     msg.priority = priority

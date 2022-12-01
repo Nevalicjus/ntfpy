@@ -15,6 +15,18 @@ logger = logging.getLogger(__name__)
 OPTIONAL_FIELDS = ["title", "priority", "tags", "click", "attach", "actions", "email", "delay", "icon"]
 
 async def raw_subscribe(server: str, topic: str, auth: Optional[str] = None, handler: Callable[[NTFYMessage], None] = print):
+    """
+    Parameters
+    ----------
+    server: :class:`str`
+        server's url
+    topic: :class:`str`
+        topic to subscribe to
+    auth: Optional[:class:`str`]
+        ``user:password``
+    handler: Callable[[:class:`NTFYMessage`], ``None``]
+        function to handle printing of received messages; by default it's :py:func:`print`
+    """
     headers = {}
     if auth is not None:
         headers["Authorization"] = f"Basic {base64.b64encode(auth.encode('ascii')).decode('ascii')}"

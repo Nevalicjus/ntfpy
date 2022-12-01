@@ -11,6 +11,30 @@ __all__ = [
 PRIORITY = Literal[1, 2, 3, 4, 5]
 
 class NTFYPushMessage():
+    """
+    Attributes
+    ----------
+    message: :class:`str`
+        message's content
+    title: Optional[:class:`str`]
+        message's title
+    priority: Optional[:class:`int`]
+        message's priority
+    tags: Optional[Sequence[:class:`str`]]
+        message's tags
+    click_url: Optional[:class:`str`]
+        message's click url
+    attachment: Optional[``Any``]
+        message's attachments
+    actions: Optional[``Any``]
+        message's actions
+    email: Optional[:class:`str`]
+        message's email
+    delay: Optional[:class:`str`]
+        message's delay
+    icon_url: Optional[:class:`str`]
+        message's icon url
+    """
     def __init__(self, message: str, title: Optional[str] = None, priority: Optional[PRIORITY] = None, 
                        tags: Optional[Sequence[str]] = None, click_url: Optional[str] = None, attach: Optional[NTFYUrlAttachment] = None, 
                        actions: Optional[Sequence[NTFYAction]] = None, email: Optional[str] = None, delay: Optional[str] = None,
@@ -27,20 +51,44 @@ class NTFYPushMessage():
         self.icon_url: Optional[str] = icon_url
     
     def addTag(self, tag: str):
+        """
+        Parameters
+        ----------
+        tag: :class:`str`
+            tag to add
+        """
         if self.tags is None:
             self.tags = []
         self.tags.append(tag)
     
     def removeTag(self, tag: str):
+        """
+        Parameters
+        ----------
+        tag: :class:`str`
+            tag to remove
+        """
         if self.tags is not None:
             self.tags.remove(tag)
     
     def addAction(self, action: NTFYAction):
+        """
+        Parameters
+        ----------
+        action: :class:`NTFYAction`
+            action to add
+        """
         if self.actions is None:
             self.actions = []
         self.actions.append(action)
     
     def removeAction(self, action: NTFYAction):
+        """
+        Parameters
+        ----------
+        action: :class:`NTFYAction`
+            action to remove
+        """
         if self.actions is not None:
             self.actions.remove(action)
     

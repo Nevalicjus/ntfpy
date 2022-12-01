@@ -9,6 +9,16 @@ __all__ = [
 METHOD = Literal["GET", "POST", "PUT", "PATCH", "DELETE"]
 
 class NTFYHttpAction(NTFYAction):
+    """
+    Extends :class:`NTFYAction`
+
+    Attributes
+    ----------
+    label: :class:`str`
+        action's label
+    url: :class:`str`
+        action's url
+    """
     def __init__(self, label: str, url: str):
         super().__init__("http", label)
         self.url = url
@@ -16,13 +26,27 @@ class NTFYHttpAction(NTFYAction):
         self.headers: Optional[MutableMapping[str, str]] = None
         self.body: Optional[str] = None
     
-    def setMethod(self, method: METHOD) :
+    def setMethod(self, method: METHOD):
+        """
+        Parameters
+        ----------
+        method: :class:`METHOD`
+            method to set
+        """
         self.method = method
 	
-    def addHeader(self, header: str, value: str):
+    def addHeader(self, name: str, value: str):
+        """
+        Parameters
+        ----------
+        name: :class:`str`
+            name of the header
+        value: :class:`str`
+            value of the header
+        """
         if self.headers is None:
             self.headers = {}
-        self.headers[header] = value
+        self.headers[name] = value
     
     def format_header(self) -> Mapping[str, Any]:
         res: dict[str, Any] = {
