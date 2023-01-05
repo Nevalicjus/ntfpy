@@ -47,7 +47,7 @@ htmlhelp_basename = "ntfpydoc"
 # Extension Options
 
 resource_links = {
-  "discord": "https://n3v.xyz/support",
+  "discord": "https://nevalicj.us/support",
   "issues": "https://github.com/nevalicjus/ntfpy/issues",
   "examples": "https://github.com/nevalicjus/ntfpy/tree/main/examples"
 }
