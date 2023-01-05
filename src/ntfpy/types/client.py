@@ -1,5 +1,8 @@
-from requests import Response
-from typing import Optional, Callable, Final, Sequence
+import requests
+import logging
+import json
+import base64
+from typing import Callable, Final, Optional, Sequence
 
 from .server import NTFYServer
 from .actions import NTFYAction
@@ -7,12 +10,13 @@ from .attachments import NTFYUrlAttachment
 from .message import NTFYMessage
 from .push_message import NTFYPushMessage, PRIORITY
 from .user import NTFYUser
-from ..raw_send import raw_send, raw_send_message
-from ..raw_subscribe import raw_subscribe
 
 __all__ = [
     "NTFYClient"
 ]
+
+logger = logging.getLogger(__name__)
+OPTIONAL_FIELDS = ["title", "priority", "tags", "click", "attach", "actions", "email", "delay", "icon"]
 
 class NTFYClient():
     """
@@ -29,7 +33,7 @@ class NTFYClient():
 
     def send(self, message: str, title: Optional[str] = None, priority: Optional[PRIORITY] = None, tags: Optional[str] = None, 
             click: Optional[str] = None, attach: Optional[NTFYUrlAttachment] = None, actions: Optional[Sequence[NTFYAction]] = None, 
-            email: Optional[str] = None, delay: Optional[str] = None, icon: Optional[str] = None) -> Response: 
+            email: Optional[str] = None, delay: Optional[str] = None, icon: Optional[str] = None) -> requests.Response: 
         """
         Parameters
         ----------
@@ -59,9 +63,22 @@ class NTFYClient():
         requests.Response
         """
         auth = self.user.auth() if self.user is not None else None
-        return raw_send(self.server.url, self.topic, message, auth = auth, title = title, priority = priority, tags = tags, click = click, attach = attach, actions = actions, email = email, delay = delay, icon = icon)
+        msg = NTFYPushMessage(message, tags = tags, actions = actions)
+        msg.title = title
+        msg.priority = priority
+        msg.click_url = click
+        msg.attachment = attach
+        msg.email = email
+        msg.delay = delay
+        msg.icon_url = icon
+
+        headers: Mapping[str, str] = {}
+        if auth is not None:
+            headers["Authorization"] = f"Basic {base64.b64encode(auth.encode('ascii')).decode('ascii')}"
+        data = msg.json(self.topic)
+        return requests.post(f"{self.server.url}/", headers = headers, json = data)
         
-    def send_message(self, message: NTFYPushMessage) -> Response:
+    def send_message(self, message: NTFYPushMessage) -> requests.Response:
         """
         Parameters
         ----------
@@ -69,7 +86,11 @@ class NTFYClient():
             message to send
         """
         auth = self.user.auth() if self.user is not None else None
-        return raw_send_message(self.server.url, self.topic, message, auth = auth)
+        headers: Mapping[str, str] = {}
+        if auth is not None:
+            headers["Authorization"] = f"Basic {base64.b64encode(auth.encode('ascii')).decode('ascii')}"
+        data = message.json(self.topic)
+        return requests.post(f"{self.server.url}/", headers = headers, json = data)
         
     async def subscribe(self, handler: Callable[[NTFYMessage], None] = print):
         """
@@ -79,4 +100,19 @@ class NTFYClient():
             function to handle printing of received messages; by default it's :py:func:`print`
         """
         auth = self.user.auth() if self.user is not None else None
-        await raw_subscribe(self.server.url, self.topic, auth = auth, handler = handler)
+
+        headers = {}
+        if auth is not None:
+            headers["Authorization"] = f"Basic {base64.b64encode(auth.encode('ascii')).decode('ascii')}"
+        r = requests.get(f"{self.server}/{self.topic}/json", stream = True, headers = headers)
+        for l in r.iter_lines():
+            if l:
+                d = json.loads(l.decode("utf-8"))
+                if d["event"] == "message":
+                    m = NTFYMessage(d["message"], d["id"], d["time"], d["topic"])
+                    for x in OPTIONAL_FIELDS:
+                        if x in d:
+                            setattr(m, x, d[x])
+                    handler(m)
+                else:
+                    logger.debug(d)
