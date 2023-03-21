@@ -104,7 +104,7 @@ class NTFYClient():
         headers = {}
         if auth is not None:
             headers["Authorization"] = f"Basic {base64.b64encode(auth.encode('ascii')).decode('ascii')}"
-        r = requests.get(f"{self.server}/{self.topic}/json", stream = True, headers = headers)
+        r = requests.get(f"{self.server.url}/{self.topic}/json", stream = True, headers = headers)
         for l in r.iter_lines():
             if l:
                 d = json.loads(l.decode("utf-8"))
