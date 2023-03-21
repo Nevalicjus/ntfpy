@@ -3,6 +3,16 @@
 Changelog
 =========
 
+.. _vp0p0p12:
+
+v0.0.12
+-------
+
+Bug Fixes
+~~~~~~~~~
+
+- Fixed client.subscribe()
+
 .. _vp0p0p11:
 
 v0.0.11
