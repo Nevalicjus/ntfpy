@@ -11,9 +11,9 @@ sys.path.append(os.path.abspath("extensions"))
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = "ntfpy"
-copyright = "2022, Nevalicjus"
+copyright = "2024, Nevalicjus"
 author = "Nevalicjus"
-release = "0.0.10"
+release = "0.0.12"
 
 # General
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -39,8 +39,8 @@ html_theme = "domdf_sphinx_theme"
 html_static_path = ["_static"]
 
 html_show_sphinx = False
-html_logo = "./images/ntfpy-50x50.png"
-html_favicon = "./images/ntfpy.ico"
+html_logo = "./icons/ntfpy-50x50.png"
+html_favicon = "./icons/ntfpy.ico"
 
 htmlhelp_basename = "ntfpydoc"
 
